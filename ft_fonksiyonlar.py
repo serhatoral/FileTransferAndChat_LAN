@@ -1,4 +1,3 @@
-
 import simplejson
 import base64
 import os
@@ -55,7 +54,7 @@ class fonksiyonlar:
             
             if input == "quit":
                 self.connection.close()
-                exit()                                            
+                return "quit"                                            
             return self.json_receive() 
 
 
