@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ft_fonksiyonlar
+import help
 import socket
 from rich.console import Console
 
@@ -21,27 +22,35 @@ class Yonetici:
     def start(self):
         
         while True:
-            user_input = self.consol.input("[yellow]Enter command:") 
+            try:
+                user_input = self.consol.input("[yellow]Enter command:") 
 
-            
-            if user_input.startswith("upload "):
-                user_input = user_input.split(" ",1)
-                self.fonk.zipped(user_input)
-            
-            user_input = self.fonk.check_command(user_input)
+                if user_input=="help":
+                    help.Help.help_write()
+                    continue
+                
+                if user_input.startswith("upload "):
+                    user_input = user_input.split(" ",1)
+                    self.fonk.zipped(user_input)
+                
+                user_input = self.fonk.check_command(user_input)
 
-            if isinstance(user_input,list):
-                if user_input[0] == "download":
-                    boyut = self.fonk.command_run(["boyut",user_input[1]])
-                    output = self.fonk.run_for_download(user_input,boyut)
-                elif user_input[0] == "upload":
-                    output = self.fonk.run_for_upload(user_input)
+                
+                if isinstance(user_input,list):
+                    if user_input[0] == "download":
+                        boyut = self.fonk.command_run(["boyut",user_input[1]])
+                        output = self.fonk.run_for_download(user_input,boyut)
+                    elif user_input[0] == "upload":
+                        output = self.fonk.run_for_upload(user_input)
+                    else:
+                        output = self.fonk.command_run(user_input)
                 else:
                     output = self.fonk.command_run(user_input)
-            else:
-                output = self.fonk.command_run(user_input)
-            
-            try:                             
+                
+                      
+                if output=="quit":
+                    break
+                                  
                 if user_input[0] == "download":                        
                     if isinstance(output,list):                      
                         output = self.fonk.save_file(output[1],output[0])
