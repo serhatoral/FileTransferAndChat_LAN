@@ -43,20 +43,26 @@ class Dinleyici:
     def start(self):
         i=0
         while True:
-            command = self.fonk.json_receive()
-            
-            if command == "quit":
-                    self.connection.close()
-                    exit()
 
-            command = self.fonk.check_command(command)
-                
-            output = self.command_run(command)
+            command = self.fonk.json_receive()
+
+            if command == "quit":                        
+                        self.connection.close()
+                        exit()
                         
-            if isinstance(output,list):
-               pass            
-            else:
-                output = output.decode("latin5") 
+            try:
                 
-            self.fonk.json_send(output)  
+                command = self.fonk.check_command(command)
+                    
+                output = self.command_run(command)
+                            
+                if isinstance(output,list):
+                    pass            
+                else:
+                    output = output.decode("latin5") 
+                    
+                self.fonk.json_send(output)  
+            except Exception:                
+                output = bytes("Error! Try again.","utf-8")
+                self.fonk.json_send(output)
         self.connection.close()
